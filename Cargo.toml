@@ -1,0 +1,13 @@
+[package]
+name = "nanofetch"
+version = "0.2.0"
+edition = "2021"
+authors = ["Gourav Jareda"]
+description = "A minimal terminal fetch and personal reminder tool"
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true

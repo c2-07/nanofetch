@@ -1,24 +1,23 @@
 # ─────────────────────────────
-# Makefile for nanofetch
+# Makefile for nanofetch (Rust)
 # ─────────────────────────────
 
-# Compiler
-CC = gcc
+TARGET = nanofetch
+RELEASE_BIN = target/release/$(TARGET)
 
-# Source and target
-SRC = nanofetch.c
-TARGET = nanofetch 
-
-# Compiler flags for max optimization
-CFLAGS = -O3 -march=native -flto -funroll-loops -ffast-math -DNDEBUG
-
-# Default target
+# Default target: compile release binary with cargo
 all: $(TARGET)
 
-# Build executable
-$(TARGET): $(SRC)
-	$(CC) $(CFLAGS) $(SRC) -o $(TARGET)
+$(TARGET): $(RELEASE_BIN)
+	cp $(RELEASE_BIN) $(TARGET)
 	chmod +x $(TARGET)
+
+$(RELEASE_BIN): Cargo.toml src/*.rs
+	cargo build --release
+
+# Run unit tests
+test:
+	cargo test
 
 # Move to ~/.local/bin (create folder if not exists)
 setup: $(TARGET)
@@ -29,4 +28,5 @@ setup: $(TARGET)
 
 # Clean build files
 clean:
+	cargo clean
 	rm -f $(TARGET)
